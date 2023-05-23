@@ -11,4 +11,5 @@ public interface ProductServicetIntf {
 	public Product save(Product product);
 	public Product update(Product product);
 	public void delete(int id);
+	public Product vender(Product product, Double quantidade);
 }
