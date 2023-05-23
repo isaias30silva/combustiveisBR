@@ -51,6 +51,27 @@ public class ProductService implements ProductServicetIntf{
 	//primeiro, é preciso que os produtos estejam criados no banco (gasolina, etanol, etc) 
 	//e que todos tenham valor inicial de 5000.0 litros/metros cubicos na variavel stock
 	
+	//metodo para verificar se pode ser comprada a quantidade inserida pelo usuario
+	//a compra só poderá ser efetivada se a quantidade informada, somada ao total armazenado na variável 
+	//"stock", for menor do o valor definido "storageCapacity"(5000.0)
+	//Se o resultado da soma for igual ou maior, será emitido um alerta do tipo "excede a capacidade 
+	//de estoque". 
+	//em caso positivo, a venda será realizada, atualizando a variável "stock" com o que for acrescentado.
+	 @Override
+	    public Product comprar(Product product, Double quantidade) {
+	        Double novoStock = (product.getStock() + quantidade);
+	        if (novoStock >= 5000.0) {
+	        	//se a compra for menor ou igual à 5000.0 (o total de storageCapacity, será exibida uma caixa de diálogo
+	        	JOptionPane.showMessageDialog(null, "Operação negada\nMotivo: excede a capacidade de estoque\nEstoque atual: " + product.getStock());
+	                return null;
+	            } else if (novoStock < (+5000.0)) {
+	                return null;
+	            }
+	        
+	        product.setStock(novoStock);
+	        return dao.save(product);
+	    }
+	
 	//metodo para verificar se pode ser vendida a quantidade solicitada pelo cliente
 	//será verificado se a quantidade da variável "stock" menos a quantidade pedida pelo cliente é maior que zero
 	//em caso negativo, o retorno será nulo. 
@@ -74,9 +95,6 @@ public class ProductService implements ProductServicetIntf{
 	        	JOptionPane.showMessageDialog(null, "Abastecimento de Estoque\nReservatório com menos de 20% da capacidade\nEstoque atual: " + novoStock);
 	            }
 	        return dao.save(product);
-	        
-	        
-	        
 	    }
 
 }
