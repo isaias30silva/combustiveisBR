@@ -30,7 +30,7 @@ public class AuthenticationService {
 		user.setPosition(request.getPosition());
 		user.setStatus(request.getStatus());
 		user.setCpf(request.getCpf());
-		user.setPassword(passwordEncoder.encode(user.generatePassword()));
+		user.setPassword(passwordEncoder.encode(user.getCpf().substring(0, 4)));
 		user.setRole(request.getRole());
 		
 		var savedUser = dao.save(user);

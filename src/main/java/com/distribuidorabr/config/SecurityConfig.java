@@ -2,6 +2,7 @@ package com.distribuidorabr.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import static org.springframework.security.config.Customizer.withDefaults;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -26,9 +27,14 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
         		.csrf().disable()
+        		.httpBasic(withDefaults())
                 .authorizeHttpRequests()
-                .requestMatchers("/**")
-                .permitAll()
+                .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
+                .requestMatchers(HttpMethod.POST, "/register").permitAll()
+                .requestMatchers("/products/**").hasAnyAuthority("USER", "ADMIN")
+                .requestMatchers("/employee/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/companies/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/order/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
