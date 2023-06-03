@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.distribuidorabr.DAO.CompanyDAO;
@@ -21,7 +22,7 @@ public class CompanyService implements CompanyServiceIntf{
 	
 	@Override
 	public ArrayList<Company> findAll() {
-		ArrayList<Company> list = (ArrayList<Company>)dao.findAll();
+		ArrayList<Company> list = (ArrayList<Company>)dao.findAll(Sort.by(Sort.Direction.ASC, "corporateName"));
 		if(!list.isEmpty()) {
 			return list;
 		}
@@ -76,6 +77,24 @@ public class CompanyService implements CompanyServiceIntf{
 	@Override
 	public void delete(UUID id) {
 		dao.deleteById(id);
+	}
+
+	@Override
+	public ArrayList<Company> findAllCustomers() {
+		ArrayList<Company> list = dao.findAllCustomers(Sort.by(Sort.Direction.ASC, "corporateName"));
+		if(!list.isEmpty()) {
+			return list;
+		}
+		throw new NoQueryResultsException("Não foram encontrados registros para a busca selecionada");
+	}
+
+	@Override
+	public ArrayList<Company> findAllSuppliers() {
+		ArrayList<Company> list = dao.findAllSuppliers(Sort.by(Sort.Direction.ASC, "corporateName"));
+		if(!list.isEmpty()) {
+			return list;
+		}
+		throw new NoQueryResultsException("Não foram encontrados registros para a busca selecionada");
 	}
 
 }

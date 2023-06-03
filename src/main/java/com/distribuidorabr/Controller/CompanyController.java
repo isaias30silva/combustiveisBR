@@ -75,9 +75,27 @@ public class CompanyController {
 
 	@GetMapping("/companies/search/{corporateName}")
 	public ResponseEntity<List<Company>> findByCorporateName(@PathVariable String corporateName) {
-		ArrayList<Company> res = service.findByCorporateName(corporateName);
-		if (!res.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.OK).body(res);
+		ArrayList<Company> list = service.findByCorporateName(corporateName);
+		if (!list.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(list);
+		}
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
+	@GetMapping("/companies/customers")
+	public ResponseEntity<List<Company>> findAllCustomers(){
+		ArrayList<Company> list = service.findAllCustomers();
+		if(!list.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(list);
+		}
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
+	@GetMapping("/companies/suppliers")
+	public ResponseEntity<List<Company>> findAllSuppliers(){
+		ArrayList<Company> list = service.findAllSuppliers();
+		if(!list.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.OK).body(list);
 		}
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
