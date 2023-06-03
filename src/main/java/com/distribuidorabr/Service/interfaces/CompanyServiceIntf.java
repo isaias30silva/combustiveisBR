@@ -14,4 +14,6 @@ public interface CompanyServiceIntf {
 	public Company save(Company company);
 	public Company update(Company company);
 	public void delete(UUID id);
+	public ArrayList<Company> findAllCustomers();
+	public ArrayList<Company> findAllSuppliers();
 }
