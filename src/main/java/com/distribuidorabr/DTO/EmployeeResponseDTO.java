@@ -1,11 +1,10 @@
 package com.distribuidorabr.DTO;
 
 import java.io.Serializable;
-import java.util.List;
 
 import com.distribuidorabr.Model.Employee;
 import com.distribuidorabr.Model.Person;
-import com.distribuidorabr.Model.Role;
+import com.distribuidorabr.enums.Role;
 
 /* 
  * This DTO doesn't have the 'password' attribute
@@ -22,7 +21,7 @@ public class EmployeeResponseDTO extends Person implements Serializable{
 		
 		private boolean status;
 		
-		private List<Role> roles;
+		private Role role;
 		
 		public EmployeeResponseDTO() {
 		}
@@ -37,7 +36,7 @@ public class EmployeeResponseDTO extends Person implements Serializable{
 			this.cpf = employee.getCpf();
 			this.position = employee.getPosition();
 			this.status = employee.getStatus();
-			this.roles = employee.getRoles();
+			this.role = employee.getRole();
 		}
 
 		public String getName() {
@@ -72,12 +71,12 @@ public class EmployeeResponseDTO extends Person implements Serializable{
 			this.status = status;
 		}
 
-		public List<Role> getRoles() {
-			return roles;
+		public Role getRole() {
+			return role;
 		}
 
-		public void setRoles(List<Role> roles) {
-			this.roles = roles;
+		public void setRoles(Role role) {
+			this.role = role;
 		}
 		
 }

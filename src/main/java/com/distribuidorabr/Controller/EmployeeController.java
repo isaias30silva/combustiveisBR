@@ -19,6 +19,7 @@ import com.distribuidorabr.DTO.EmployeeResponseDTO;
 import com.distribuidorabr.Model.Employee;
 import com.distribuidorabr.Service.interfaces.EmployeeServiceIntf;
 
+
 import jakarta.validation.Valid;
 
 @RestController
@@ -69,7 +70,7 @@ public class EmployeeController {
 		if (res != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(new EmployeeResponseDTO(res));
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.badRequest().build();
 	}
 
 	@GetMapping("/employee/cpf/{cpf}")
@@ -78,7 +79,7 @@ public class EmployeeController {
 		if (res != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(new EmployeeResponseDTO(res));
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping("/employee/validatePassword")

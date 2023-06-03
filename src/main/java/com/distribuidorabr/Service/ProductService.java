@@ -1,12 +1,18 @@
 package com.distribuidorabr.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.distribuidorabr.DAO.ProductDAO;
+import com.distribuidorabr.Exceptions.CpfAlreadyRegisteredException;
+import com.distribuidorabr.Exceptions.InvalidUpdateQueryException;
+import com.distribuidorabr.Exceptions.NoQueryResultsException;
+import com.distribuidorabr.Model.Company;
+import com.distribuidorabr.Model.Employee;
 import com.distribuidorabr.Model.Product;
 import com.distribuidorabr.Service.interfaces.ProductServicetIntf;
 
@@ -18,12 +24,21 @@ public class ProductService implements ProductServicetIntf{
 	
 	@Override
 	public ArrayList<Product> findAll() {
-		return (ArrayList<Product>) dao.findAll();
+		ArrayList<Product> list = (ArrayList<Product>)dao.findAll();
+		if(!list.isEmpty()) {
+			return list;
+		}
+		throw new NoQueryResultsException("Não foram encontrados registros para a busca selecionada");
 	}
 
 	@Override
 	public Product findById(UUID id) {
-		return dao.findById(id).orElse(null);
+		Optional<Product> res = dao.findById(id);
+		if(res.isPresent()) {
+			Product product = res.get();
+			return product;
+		}
+		throw new InvalidUpdateQueryException("Não foram encontrados registros para o ID " + id);
 	}
 
 	@Override
@@ -33,11 +48,13 @@ public class ProductService implements ProductServicetIntf{
 
 	@Override
 	public Product update(Product product) {
-		if(product.getId() != null && product.getName() != null) {
-			return dao.save(product);
-		} else {
-			return null;
+		Optional<Product> res = dao.findById(product.getId());
+		if (res.isEmpty()) {
+			throw new InvalidUpdateQueryException("Produto inválido!");
+		} else if (res.get().getCategory() != product.getCategory()) {
+			throw new InvalidUpdateQueryException("Produto já cadastrado!");
 		}
+		return dao.save(product);
 		
 	}
 

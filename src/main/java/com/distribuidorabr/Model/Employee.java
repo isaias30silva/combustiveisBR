@@ -1,28 +1,30 @@
 package com.distribuidorabr.Model;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.distribuidorabr.enums.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "employee")
-public class Employee extends Person implements UserDetails, Serializable {
+public class Employee extends Person implements UserDetails{
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,22 +51,24 @@ public class Employee extends Person implements UserDetails, Serializable {
 	// @Size(max=15, min=4, message="Senha deve conter entre 4 e 15 caracteres")
 	private String password;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "employee_role", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private List<Role> roles;
+	@Enumerated(value=EnumType.STRING)
+	private Role role;
+	
+	//@OneToMany(mappedBy = "employee")
+	//private List<Token> tokens;
 
 	public Employee() {
 		super();
 	}
 
-	public Employee(String name, String position, boolean status, String cpf, String password, List<Role> roles) {
+	public Employee(String name, String position, boolean status, String cpf, String password, Role role) {
 		super();
 		this.name = name;
 		this.position = position;
 		this.status = status;
 		this.cpf = cpf;
 		this.password = password;
-		this.roles = roles;
+		this.role = role;
 	}
 
 	public String getName() {
@@ -99,12 +103,12 @@ public class Employee extends Person implements UserDetails, Serializable {
 		this.cpf = cpf;
 	}
 
-	public List<Role> getRoles() {
-		return roles;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	@Override
@@ -119,12 +123,12 @@ public class Employee extends Person implements UserDetails, Serializable {
 	public String generatePassword() {
 		// Default password generated is
 		// the first 5 characters of employee's CPF
-		return getPassword().substring(0, 6);
+		return getCpf().substring(0, 5);
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return (Collection<? extends GrantedAuthority>) this.roles;
+		return List.of(new SimpleGrantedAuthority(role.name()));
 	}
 
 	@Override

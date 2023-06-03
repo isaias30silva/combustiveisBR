@@ -1,12 +1,15 @@
 package com.distribuidorabr.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.distribuidorabr.DAO.OrderDAO;
+import com.distribuidorabr.Exceptions.InvalidUpdateQueryException;
+import com.distribuidorabr.Exceptions.NoQueryResultsException;
 import com.distribuidorabr.Model.Item;
 import com.distribuidorabr.Model.Order;
 import com.distribuidorabr.Model.Product;
@@ -24,12 +27,21 @@ public class OrderService implements OrderServiceIntf{
 	
 	@Override
 	public ArrayList<Order> findAll() {
-		return (ArrayList<Order>)dao.findAll();
+		ArrayList<Order> list = (ArrayList<Order>)dao.findAll();
+		if(!list.isEmpty()) {
+			return list;
+		}
+		throw new NoQueryResultsException("Não foram encontrados registros para a busca selecionada");
 	}
 
 	@Override
 	public Order findById(UUID id) {
-		return dao.findById(id).orElse(null);
+		Optional<Order> res = dao.findById(id);
+		if (res.isPresent()) {
+			Order order = res.get();
+			return order;
+		}
+		throw new InvalidUpdateQueryException("Não foram encontrados registros para o ID " + id);
 	}
 
 	@Override
