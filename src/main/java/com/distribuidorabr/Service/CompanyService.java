@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.distribuidorabr.DAO.CompanyDAO;
+import com.distribuidorabr.Exceptions.InvalidUpdateQueryException;
 import com.distribuidorabr.Exceptions.NoQueryResultsException;
 import com.distribuidorabr.Model.Company;
 import com.distribuidorabr.Service.interfaces.CompanyServiceIntf;
@@ -20,7 +21,11 @@ public class CompanyService implements CompanyServiceIntf{
 	
 	@Override
 	public ArrayList<Company> findAll() {
-		return (ArrayList<Company>)dao.findAll();
+		ArrayList<Company> list = (ArrayList<Company>)dao.findAll();
+		if(!list.isEmpty()) {
+			return list;
+		}
+		throw new NoQueryResultsException("Não foram encontrados registros para a busca selecionada");
 	}
 
 	@Override
@@ -30,7 +35,7 @@ public class CompanyService implements CompanyServiceIntf{
 			Company company = res.get();
 			return company;
 		}
-		throw new NoQueryResultsException("Não foram encontrados registros para o CNPJ " + id);
+		throw new InvalidUpdateQueryException("Não foram encontrados registros para o ID " + id);
 	}
 
 	@Override
