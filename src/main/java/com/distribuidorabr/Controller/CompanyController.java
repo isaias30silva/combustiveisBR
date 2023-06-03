@@ -1,6 +1,7 @@
 package com.distribuidorabr.Controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class CompanyController {
 		if (res != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(res);
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping("/companies/cnpj/{cnpj}")
@@ -45,7 +46,7 @@ public class CompanyController {
 		if (res != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(res);
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/companies")
@@ -73,12 +74,12 @@ public class CompanyController {
 	}
 
 	@GetMapping("/companies/search/{corporateName}")
-	public ResponseEntity<Company> findByCorporateName(@PathVariable String corporateName) {
-		Company res = service.findByCorporateName(corporateName);
-		if (res != null) {
+	public ResponseEntity<List<Company>> findByCorporateName(@PathVariable String corporateName) {
+		ArrayList<Company> res = service.findByCorporateName(corporateName);
+		if (!res.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.OK).body(res);
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
 }

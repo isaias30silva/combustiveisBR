@@ -10,7 +10,7 @@ public interface CompanyServiceIntf {
 	public ArrayList<Company> findAll();
 	public Company findById(UUID id);
 	public Company findByCnpj(String cnpj);
-	public Company findByCorporateName(String corporateName);
+	public ArrayList<Company> findByCorporateName(String corporateName);
 	public Company save(Company company);
 	public Company update(Company company);
 	public void delete(UUID id);

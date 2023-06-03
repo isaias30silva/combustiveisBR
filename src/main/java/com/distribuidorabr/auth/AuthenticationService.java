@@ -30,12 +30,12 @@ public class AuthenticationService {
 		user.setPosition(request.getPosition());
 		user.setStatus(request.getStatus());
 		user.setCpf(request.getCpf());
-		user.setPassword(passwordEncoder.encode(user.getCpf().substring(0, 4)));
+		user.setPassword(passwordEncoder.encode(request.generatePassword()));
 		user.setRole(request.getRole());
 		
 		var savedUser = dao.save(user);
 		
-		var jwtToken = jwtService.generateToken(user);
+		var jwtToken = jwtService.generateToken(savedUser);
 		
 		return AuthenticationResponse.builder().token(jwtToken).build();
 	}

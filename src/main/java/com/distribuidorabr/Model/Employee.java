@@ -123,7 +123,7 @@ public class Employee extends Person implements UserDetails{
 	public String generatePassword() {
 		// Default password generated is
 		// the first 5 characters of employee's CPF
-		return getPassword().substring(0, 6);
+		return getCpf().substring(0, 5);
 	}
 
 	@Override

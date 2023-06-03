@@ -1,12 +1,14 @@
 package com.distribuidorabr.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.distribuidorabr.DAO.CompanyDAO;
+import com.distribuidorabr.Exceptions.NoQueryResultsException;
 import com.distribuidorabr.Model.Company;
 import com.distribuidorabr.Service.interfaces.CompanyServiceIntf;
 
@@ -23,29 +25,43 @@ public class CompanyService implements CompanyServiceIntf{
 
 	@Override
 	public Company findById(UUID id) {
-		return dao.findById(id).orElse(null);
+		Optional<Company> res = dao.findById(id);
+		if(res.isPresent()) {
+			Company company = res.get();
+			return company;
+		}
+		throw new NoQueryResultsException("Não foram encontrados registros para o CNPJ " + id);
 	}
 
 	@Override
 	public Company findByCnpj(String cnpj) {
-		return dao.findByCnpj(cnpj).orElse(null);
+		Optional<Company> res = dao.findByCnpj(cnpj);
+		if(res.isPresent()) {
+			Company company = res.get();
+			return company;
+		}
+		throw new NoQueryResultsException("Não foram encontrados registros para o CNPJ " + cnpj);
 	}
 
 	@Override
-	public Company findByCorporateName(String corporateName) {
-		return dao.findByCorporateNameContaining(corporateName).orElse(null);
+	public ArrayList<Company> findByCorporateName(String corporateName) {
+		ArrayList<Company> list = dao.findAllByCorporateNameContaining(corporateName);
+		if(!list.isEmpty()) {
+			return list;
+		}
+		throw new NoQueryResultsException("Não foram encontrados registros para o termo pesquisado");
 	}
 	
 	@Override
-	public Company save(Company employee) {
-		return dao.save(employee);
+	public Company save(Company company) {
+		return dao.save(company);
 	}
 
 	@Override
-	public Company update(Company employee) {
+	public Company update(Company company) {
 		
-		if(employee.getId() != null && employee.getCorporateName() != null) {
-			return dao.save(employee);
+		if(company.getId() != null && company.getCorporateName() != null) {
+			return dao.save(company);
 		} else {
 			return null;
 		}

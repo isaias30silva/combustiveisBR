@@ -17,6 +17,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.distribuidorabr.Exceptions.CpfAlreadyRegisteredException;
 import com.distribuidorabr.Exceptions.InvalidStockPurchaseException;
 import com.distribuidorabr.Exceptions.InvalidStockSaleException;
+import com.distribuidorabr.Exceptions.InvalidUpdateQueryException;
+import com.distribuidorabr.Exceptions.NoQueryResultsException;
 
 @ControllerAdvice
 public class ValidationHandler extends ResponseEntityExceptionHandler{
@@ -58,5 +60,22 @@ public class ValidationHandler extends ResponseEntityExceptionHandler{
 		return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
 		
 	}
+	
+	@ExceptionHandler(value = NoQueryResultsException.class)
+	public ResponseEntity<Object> NoQueryResultsException(NoQueryResultsException e, WebRequest request){
+		Map<String, String> errorMessage = new HashMap<>();
+		errorMessage.put("Message", e.getMessage());
+		return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.OK);
+		
+	}
+	
+	@ExceptionHandler(value = InvalidUpdateQueryException.class)
+	public ResponseEntity<Object> InvalidUpdateQueryException(InvalidUpdateQueryException e, WebRequest request){
+		Map<String, String> errorMessage = new HashMap<>();
+		errorMessage.put("Message", e.getMessage());
+		return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+		
+	}
+	
 	
 }
