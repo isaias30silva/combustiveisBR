@@ -20,7 +20,7 @@ Foi proposto desenvolver uma aplicação completa para uma distribuidora de comb
 - Spring Security 6;
 - Autenticação com JWT;
 - Banco de Dados MySQL 8;
-- Angular (pendente);
+- Front-end com Angular e Bootstrap (pendente).
 
 ## Como executar a aplicação
 - Clonar o repositório com o Git: `git clone https://github.com/isaias30silva/combustiveisBR`
